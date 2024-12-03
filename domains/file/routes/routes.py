@@ -14,5 +14,5 @@ def upload_file():
 
     task = long_running_task.delay(file.filename)
 
-    response = {'state': 12, 'error': 'asas'}
-    return jsonify(response, 202)
+    response = {'task_id': task.id, 'status': 'Task started'}
+    return jsonify(response), 202
