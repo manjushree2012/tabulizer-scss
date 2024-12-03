@@ -9,14 +9,14 @@ UPLOAD_DIR = 'uploads'
 @file_bp.route('/upload', methods=['POST'])
 def upload_file():
     files =  request.files.getlist("file")
-    task_ids = []
+    task_ids = {}
 
     for file in files:
         file_path = os.path.join(UPLOAD_DIR, file.filename)
         file.save(file_path)
 
         task = long_running_task.delay(file.filename)
-        task_ids.append(task.id)
+        task_ids[file.filename] = task.id
 
     response = {'task_ids': task_ids, 'status': 'Queue started'}
     return jsonify(response), 202
