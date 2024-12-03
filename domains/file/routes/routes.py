@@ -16,3 +16,40 @@ def upload_file():
 
     response = {'task_id': task.id, 'status': 'Task started'}
     return jsonify(response), 202
+
+@file_bp.route('/status/<task_id>', methods=['GET'])
+def task_status(task_id):
+    # task = long_running_task.AsyncResult(task_id)
+    
+    # if task.state == 'PENDING':
+    #     response = {
+    #         'status': 'Pending',
+    #         'state': task.state
+    #     }
+    # elif task.state != 'FAILURE':
+    #     response = {
+    #         'status': 'Running' if task.state == 'PROGRESS' else 'Completed',
+    #         'state': task.state,
+    #         'result': task.result
+    #     }
+    # else:
+    #     # Task failed
+    #     response = {
+    #         'status': 'Failed',
+    #         'state': task.state,
+    #         'error': str(task.result)
+    #     }
+    
+    # return jsonify(response)
+
+    from celery.result import AsyncResult
+    task_result = AsyncResult(task_id)
+
+    if task_result.state == 'PENDING':
+        response = {'state': task_result.state}
+    elif task_result.state != 'FAILURE':
+        response = {'state': task_result.state, 'result': task_result.result}
+    else:
+        response = {'state': task_result.state, 'error': str(task_result.info)}
+
+    return jsonify(response)
