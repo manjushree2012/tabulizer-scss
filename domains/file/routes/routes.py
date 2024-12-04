@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify
-from tasks import long_running_task
+from tasks import parse_pdf
 
 file_bp = Blueprint('file', __name__)
 
@@ -12,7 +12,7 @@ def upload_file():
     task_ids = {}
 
     for file in files:
-        task = long_running_task.delay(file.filename)
+        task = parse_pdf.delay(file.filename)
         task_ids[file.filename] = task.id
 
         task_dir = os.path.join(UPLOAD_DIR, str(task.id))
