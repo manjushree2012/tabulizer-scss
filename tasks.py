@@ -11,8 +11,11 @@ PROCESSED_DIR = 'processed'
 @celery.task(bind=True)
 def parse_pdf(self,filename):
     try:
-        input_path = os.path.join(UPLOAD_DIR, filename)
-        output_path = os.path.join(PROCESSED_DIR, f"{os.path.splitext(filename)[0]}.csv")
+        #Get the task ID
+        task_id = self.request.id
+
+        input_path = os.path.join(UPLOAD_DIR , task_id, filename)
+        output_path = os.path.join(UPLOAD_DIR, task_id, f"{os.path.splitext(filename)[0]}.csv")
 
         print(f"Reading PDF from: {input_path}")
 
@@ -23,7 +26,6 @@ def parse_pdf(self,filename):
         
         combined_df = pd.concat(tables)
         combined_df.to_csv(output_path, index=False)
-        
         return {
             'status': 'Task completed successfully!',
             'path': output_path
