@@ -12,12 +12,14 @@ def upload_file():
     task_ids = {}
 
     for file in files:
-        file_path = os.path.join(UPLOAD_DIR, file.filename)
-        file.save(file_path)
-
         task = long_running_task.delay(file.filename)
         task_ids[file.filename] = task.id
 
+        task_dir = os.path.join(UPLOAD_DIR, str(task.id))
+        os.makedirs(task_dir, exist_ok=True)
+
+        file_path = os.path.join(task_dir, file.filename)
+        file.save(file_path)
     response = {'task_ids': task_ids, 'status': 'Queue started'}
     return jsonify(response), 202
 
