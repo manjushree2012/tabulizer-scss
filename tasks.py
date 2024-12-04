@@ -9,7 +9,7 @@ UPLOAD_DIR = 'uploads'
 PROCESSED_DIR = 'processed'
 
 @celery.task(bind=True)
-def long_running_task(self,filename):
+def parse_pdf(self,filename):
     try:
         input_path = os.path.join(UPLOAD_DIR, filename)
         output_path = os.path.join(PROCESSED_DIR, f"{os.path.splitext(filename)[0]}.csv")
