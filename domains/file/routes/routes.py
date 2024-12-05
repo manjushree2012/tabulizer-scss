@@ -4,7 +4,7 @@ from tasks import parse_pdf
 
 file_bp = Blueprint('file', __name__)
 
-UPLOAD_DIR = 'uploads'
+UPLOAD_DIR = '/app/uploads'
 
 @file_bp.route('/upload', methods=['POST'])
 def upload_file():

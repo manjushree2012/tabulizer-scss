@@ -9,8 +9,7 @@ services:
       - FLASK_APP=app.py
       - FLASK_ENV=development
     volumes:
-      # - .:/app
-       - ./uploads:/app/uploads  # Mount the uploads directory
+       - shared-data:/app/uploads  # Mount the uploads directory
     depends_on:
       - redis
     command: flask --app app run --host 0.0.0.0
@@ -19,6 +18,8 @@ services:
 
   worker:
     build: .
+    volumes:
+      - shared-data:/app/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -38,3 +39,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  shared-data:
