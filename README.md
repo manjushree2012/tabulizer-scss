@@ -29,3 +29,6 @@ Run the following commands:
 1. User uploads PDF file(s) via the POST API. Each PDF file is uploaded to the uploads folder with their own unique identifier.
 2. Celery task is trigerred asynchronously from the POST API. Each PDF is stored in their own unique folder. For processing the PDF, data is extracted and saved as a CSV. 
 3. The task completion status is logged and stored in the celery logs. The status of each task can be assessed via the GET API.
+
+## API Documentation 
+https://documenter.getpostman.com/view/21087867/2sAYBbcoWP
