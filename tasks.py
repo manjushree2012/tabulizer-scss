@@ -27,7 +27,6 @@ def parse_pdf(self,filename):
         return {
             'status': 'Task completed successfully!',
             'path': output_path,
-            'status2' : celery.AsyncResult(task_id).state
         }
     except Exception as exc:
         logger = logging.getLogger(__name__)
