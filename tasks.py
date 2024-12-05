@@ -1,14 +1,9 @@
 import os
 import tabula
 import pandas as pd
-from celery import Celery
 import logging
 
 from setup import celery
-
-# celery = Celery('tasks', 
-#                 broker_url='redis://redis:6379/0', 
-#                 result_backend='redis://redis:6379/0')
 
 UPLOAD_DIR = '/app/uploads'
 PROCESSED_DIR = 'processed'
@@ -16,7 +11,6 @@ PROCESSED_DIR = 'processed'
 @celery.task(bind=True)
 def parse_pdf(self,filename):
     try:
-        #Get the task ID
         task_id = self.request.id
 
         input_path = os.path.join(UPLOAD_DIR , task_id, filename)
@@ -37,7 +31,6 @@ def parse_pdf(self,filename):
             'status2' : celery.AsyncResult(task_id).state
         }
     except Exception as exc:
-        #Create a logger
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.ERROR)
         handler = logging.FileHandler('something.log')

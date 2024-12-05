@@ -26,7 +26,6 @@ def upload_file():
 
 @file_bp.route('/status/<task_id>', methods=['GET'])
 def task_status(task_id):
-    # from celery.result import AsyncResult
     task_result = celery.AsyncResult(task_id)
     state = task_result.state
     result = task_result.result
