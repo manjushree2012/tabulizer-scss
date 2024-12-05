@@ -4,9 +4,11 @@ import pandas as pd
 from celery import Celery
 import logging
 
-celery = Celery('tasks', broker='redis://localhost:6379/0')
+celery = Celery('tasks', 
+                broker='redis://redis:6379/0', 
+                backend='redis://redis:6379/0')
 
-UPLOAD_DIR = 'uploads'
+UPLOAD_DIR = '/app/uploads'
 PROCESSED_DIR = 'processed'
 
 @celery.task(bind=True)
