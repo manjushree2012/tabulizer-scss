@@ -6,7 +6,6 @@ import logging
 from setup import celery
 
 UPLOAD_DIR = '/app/uploads'
-PROCESSED_DIR = 'processed'
 
 @celery.task(bind=True)
 def parse_pdf(self,filename):
