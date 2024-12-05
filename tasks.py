@@ -29,9 +29,11 @@ def parse_pdf(self,filename):
             'path': output_path,
         }
     except Exception as exc:
+        log_output_path = os.path.join(UPLOAD_DIR, task_id, f"{os.path.splitext(filename)[0]}.log")
+
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.ERROR)
-        handler = logging.FileHandler('something.log')
+        handler = logging.FileHandler(log_output_path)
         handler.setLevel(logging.ERROR)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
