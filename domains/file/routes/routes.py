@@ -1,14 +1,11 @@
-import os
 from flask import Blueprint, request, jsonify
-from tasks import parse_pdf
 from setup import celery
 
 from marshmallow import ValidationError
 from .validators import validate_pdfs
+from .helpers import upload_and_process_file
 
 file_bp = Blueprint('file', __name__)
-
-UPLOAD_DIR = '/app/uploads'
 
 @file_bp.route('/upload', methods=['POST'])
 def upload_file():
@@ -22,14 +19,8 @@ def upload_file():
 
     task_ids = {}
     for file in files:
-        task = parse_pdf.delay(file.filename)
-        task_ids[file.filename] = task.id
-
-        task_dir = os.path.join(UPLOAD_DIR, str(task.id))
-        os.makedirs(task_dir, exist_ok=True)
-
-        file_path = os.path.join(task_dir, file.filename)
-        file.save(file_path)
+        file_path, task_id = upload_and_process_file(file)
+        task_ids[file.filename] = task_id
     response = {'status': 'success', 'message' : 'Queue started.', 'data' : task_ids}
     return jsonify(response), 202
 
