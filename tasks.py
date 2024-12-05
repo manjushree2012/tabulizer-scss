@@ -4,9 +4,11 @@ import pandas as pd
 from celery import Celery
 import logging
 
-celery = Celery('tasks', 
-                broker='redis://redis:6379/0', 
-                backend='redis://redis:6379/0')
+from setup import celery
+
+# celery = Celery('tasks', 
+#                 broker_url='redis://redis:6379/0', 
+#                 result_backend='redis://redis:6379/0')
 
 UPLOAD_DIR = '/app/uploads'
 PROCESSED_DIR = 'processed'
@@ -31,7 +33,8 @@ def parse_pdf(self,filename):
         combined_df.to_csv(output_path, index=False)
         return {
             'status': 'Task completed successfully!',
-            'path': output_path
+            'path': output_path,
+            'status2' : celery.AsyncResult(task_id).state
         }
     except Exception as exc:
         #Create a logger
