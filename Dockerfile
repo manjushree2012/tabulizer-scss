@@ -1,18 +1,3 @@
-# # Use the official Python image
-# FROM python:3.10-slim
-
-# # Set the working directory inside the container
-# WORKDIR /app
-
-# # Copy project files into the container
-# COPY . /app
-
-# # Install dependencies
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# # Default command to run Celery worker
-# CMD ["celery", "-A", "tasks", "worker", "--pool=threads", "--loglevel=info"]
-
 # Use a base image with Python 3.10 or higher
 FROM python:3.10-bullseye
 
